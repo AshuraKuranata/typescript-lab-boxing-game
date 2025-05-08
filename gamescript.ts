@@ -49,8 +49,10 @@ class Rank {
                 this.rankTitle = "Veteran"
                 break;
             case 4:
-                this.rankTitle = "Champion"
+                this.rankTitle = "Finalist"
                 break;
+            case 5:
+                this.rankTitle = "Champion"
         }
 
     }
@@ -74,21 +76,13 @@ function randomInt(min, max) {
 
 // Opponent Boxer Objects
 
-let boxerOpponents = [
-    { firstName: 'Bonnie', lastName: 'Boomer', nickname: 'Lefty', rankTitle: 'Rookie', rankNumber: 0, maxHp: 5, currentHp: 5, strength: 1, tenacity: 0 },
-    { firstName: 'Rob', lastName: 'Schwartz', nickname: 'Right', rankTitle: 'Greenhorn', rankNumber: 1, maxHp: 10, currentHp: 10, strength: 2, tenacity: 1 },
-    { firstName: 'Matt', lastName: 'Huntington', nickname: 'Instructor', rankTitle: 'Contender', rankNumber: 2, maxHp: 15, currentHp: 15, strength: 2, tenacity: 3 },
-    { firstName: 'Mickey', lastName: 'Tee-daugher', nickname: 'Child Explosion', rankTitle: 'Veteran', rankNumber: 3, maxHp: 20, currentHp: 20, strength: 4, tenacity: 1 },
-    { firstName: 'Small', lastName: 'Mic', nickname: 'Punch-Out', rankTitle: 'Champion', rankNumber: 4, maxHp: 30, currentHp: 30, strength: 4, tenacity: 4 },
+const boxerOpponents = [
+    { firstName: 'Bonnie', lastName: 'Boomer', nickname: 'Lefty', rankTitle: 'Rookie', rankNumber: 0, maxHp: 8, currentHp: 8, strength: 1, tenacity: 1 },
+    { firstName: 'Rob', lastName: 'Schwartz', nickname: 'Right', rankTitle: 'Greenhorn', rankNumber: 1, maxHp: 15, currentHp: 15, strength: 2, tenacity: 2 },
+    { firstName: 'Matt', lastName: 'Huntington', nickname: 'Instructor', rankTitle: 'Contender', rankNumber: 2, maxHp: 20, currentHp: 20, strength: 3, tenacity: 4 },
+    { firstName: 'Mickey', lastName: 'Tie-sin', nickname: 'Child TNT', rankTitle: 'Veteran', rankNumber: 3, maxHp: 30, currentHp: 30, strength: 7, tenacity: 3 },
+    { firstName: 'Small', lastName: 'Mic', nickname: 'Punch-Out', rankTitle: 'Champion', rankNumber: 4, maxHp: 40, currentHp: 40, strength: 6, tenacity: 5 },
 ]
-
-// Training regiment to boost stats
-
-
-
-// Fight 
-
-
 
 console.log('Welcome to the boxing simulator.  Your objective is to train to beat the Champion !')
 console.log('Let us know who you are!')
@@ -119,13 +113,12 @@ while (nameSelection === true) {
         if (regexNickname.test(nickname)) {
             console.log(`Nickname: '${nickname}'`)
         } else{
-            console.log("Invalid entry, only alphabetical letters and spaces allowed")
+            console.log("Invalid entry, only alphabetical letters spaces, and hyphens allowed")
             nickname = ''
         }
     }
     nameSelection = false
 }
-
 
 let gymDays = 1
 let playerRank = new Rank(0)
@@ -138,7 +131,7 @@ while (runGame === true) {
         playerBoxer.currentHp = playerBoxer.maxHp
     }
     console.log(`Day ${gymDays}:`)
-    console.log("What will you do? [train] [fight] [user] [quit]:")
+    console.log("What will you do? [train] [fight] [profile] [quit]:")
     userChoice = prompt()
     
     if (userChoice === 'train') {
@@ -194,8 +187,31 @@ while (runGame === true) {
                 }
             }
             else if (trainingChoice === 'tenacity') {
-                gymDays += 1
-                isTrain = false
+                console.log("Time to spar!")
+                if (playerBoxer.tenacity <= ((playerBoxer.rankNumber) + 3)) {
+                    let tenTrain = randomInt(0, 2)
+                    if (tenTrain === 0) {
+                        console.log("Sparring practice was a dud, gotta work on that technique.")
+                        gymDays += 1
+                        isTrain = false
+                    } else{
+                        playerBoxer.tenacity += tenTrain
+                        if (tenTrain === 1) {
+                            console.log(`Nice moves, your [tenacity] is now ${playerBoxer.tenacity} (gained ${tenTrain}).`)
+                            gymDays += 1
+                            isTrain = false
+                        } else {
+                            console.log(`You made a breakthrough in your technique.`)
+                            console.log(`Your [tenacity] is now ${playerBoxer.tenacity} (gained ${tenTrain}).`)
+                            gymDays += 1
+                            isTrain = false
+                        }
+                    }
+                } else{
+                    console.log(`Sparring match was refreshing, but you feel like you've reached your current potential. (rank up to increase!)`)
+                    gymDays += 1
+                    isTrain = false
+                }
             }
             else if (trainingChoice === 'return') {
                 isTrain = false
@@ -239,7 +255,7 @@ while (runGame === true) {
             }
         }
     }
-    else if (userChoice === 'user') {
+    else if (userChoice === 'profile') {
         console.log(`You are: ${playerBoxer.firstName} ${playerBoxer.lastName}`)
         console.log(`Your Nickname: '${playerBoxer.nickname}'`)
         console.log(`Your Rank: ${playerBoxer.rankTitle}`)
