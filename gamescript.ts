@@ -261,7 +261,7 @@ while (runGame === true) {
         console.log(`Your Rank: ${playerBoxer.rankTitle}`)
         console.log(`Vitality: ${playerBoxer.maxHp}`)
         console.log(`Strength: ${playerBoxer.strength}`)
-        console.log(`Tenacity: ${playerBoxer.strength}`)
+        console.log(`Tenacity: ${playerBoxer.tenacity}`)
     }
     else if (userChoice === 'quit') {
         console.log('Thanks for playing, see you soon champ!')
