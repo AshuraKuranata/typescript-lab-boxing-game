@@ -79,9 +79,10 @@ function randomInt(min, max) {
 const boxerOpponents = [
     { firstName: 'Bonnie', lastName: 'Boomer', nickname: 'Lefty', rankTitle: 'Rookie', rankNumber: 0, maxHp: 8, currentHp: 8, strength: 1, tenacity: 1 },
     { firstName: 'Rob', lastName: 'Schwartz', nickname: 'Right', rankTitle: 'Greenhorn', rankNumber: 1, maxHp: 15, currentHp: 15, strength: 2, tenacity: 2 },
-    { firstName: 'Matt', lastName: 'Huntington', nickname: 'Instructor', rankTitle: 'Contender', rankNumber: 2, maxHp: 20, currentHp: 20, strength: 3, tenacity: 4 },
-    { firstName: 'Mickey', lastName: 'Tie-sin', nickname: 'Child TNT', rankTitle: 'Veteran', rankNumber: 3, maxHp: 30, currentHp: 30, strength: 7, tenacity: 3 },
-    { firstName: 'Small', lastName: 'Mic', nickname: 'Punch-Out', rankTitle: 'Champion', rankNumber: 4, maxHp: 40, currentHp: 40, strength: 6, tenacity: 5 },
+    { firstName: 'Matt', lastName: 'Huntington', nickname: 'Instructor', rankTitle: 'Contender', rankNumber: 2, maxHp: 20, currentHp: 20, strength: 2, tenacity: 4 },
+    { firstName: 'Hippo', lastName: 'Mackentoshi', nickname: 'The Battling', rankTitle: 'Veteran', rankNumber: 3, maxHp: 35, currentHp: 35, strength: 5, tenacity: 3 },
+    { firstName: 'Mickey', lastName: 'Tie-sin', nickname: 'Child TNT', rankTitle: 'Finalist', rankNumber: 4, maxHp: 40, currentHp: 40, strength: 7, tenacity: 4 },
+    { firstName: 'Small', lastName: 'Mic', nickname: 'Punch-Out', rankTitle: 'Champion', rankNumber: 5, maxHp: 50, currentHp: 50, strength: 6, tenacity: 5 },
 ]
 
 console.log('Welcome to the boxing simulator.  Your objective is to train to beat the Champion !')
@@ -122,7 +123,8 @@ while (nameSelection === true) {
 
 let gymDays = 1
 let playerRank = new Rank(0)
-let playerBoxer = new Boxer(firstName, lastName, nickname, playerRank.rankTitle, playerRank.rankNumber, 5, 5, 1, 0)
+// let playerBoxer = new Boxer(firstName, lastName, nickname, playerRank.rankTitle, playerRank.rankNumber, 5, 5, 1, 0) // Normal start game stats
+let playerBoxer = new Boxer(firstName, lastName, nickname, playerRank.rankTitle, playerRank.rankNumber, 99, 99, 99, 99) // testing stats
 
 console.log(`Welcome ${playerBoxer.fullName}`)
 
@@ -132,7 +134,7 @@ while (runGame === true) {
     }
     console.log(`Day ${gymDays}:`)
     console.log("What will you do? [train] [fight] [profile] [quit]:")
-    userChoice = prompt()
+    userChoice = prompt().toLowerCase()
     
     if (userChoice === 'train') {
         let trainingChoice
@@ -140,12 +142,12 @@ while (runGame === true) {
         while (isTrain === true) {
             console.log(`Your Stats:\nVitality: ${playerBoxer.maxHp}\nStrength: ${playerBoxer.strength}\nTenacity: ${playerBoxer.tenacity}\n`)
             console.log('How do you want to train?')
-            console.log('[vitality] - run to build up your endurance')
-            console.log('[strength] - hit the weights to punch harder')
-            console.log('[tenacity] - spar to practice taking a beating')
-            console.log('[return] - back to previous menu')
-            trainingChoice = prompt()
-            if (trainingChoice === 'vitality') {
+            console.log('[v]itality - run to build up your endurance')
+            console.log('[s]trength - hit the weights to punch harder')
+            console.log('[t]enacity - spar to practice taking a beating')
+            console.log('[r]eturn - back to previous menu')
+            trainingChoice = prompt().toLowerCase()
+            if (trainingChoice === 'v') {
                 console.log("Let's get running!")
                 if (playerBoxer.maxHp <= ((playerBoxer.rankNumber*5) + 10)) {
                     let vitTrain = randomInt(1, 5)
@@ -159,7 +161,7 @@ while (runGame === true) {
                     isTrain = false
                 }
             }
-            else if (trainingChoice === 'strength') {
+            else if (trainingChoice === 's') {
                 console.log("Let's hit those weights!")
                 if (playerBoxer.strength <= ((playerBoxer.rankNumber) + 3)) {
                     let strTrain = randomInt(0, 2)
@@ -186,7 +188,7 @@ while (runGame === true) {
                     isTrain = false
                 }
             }
-            else if (trainingChoice === 'tenacity') {
+            else if (trainingChoice === 't') {
                 console.log("Time to spar!")
                 if (playerBoxer.tenacity <= ((playerBoxer.rankNumber) + 3)) {
                     let tenTrain = randomInt(0, 2)
@@ -213,7 +215,7 @@ while (runGame === true) {
                     isTrain = false
                 }
             }
-            else if (trainingChoice === 'return') {
+            else if (trainingChoice === 'r') {
                 isTrain = false
             }
             else {
@@ -221,8 +223,7 @@ while (runGame === true) {
             }
         }
     }
-    else if (userChoice === 'fight') {
-        
+    else if (userChoice === 'fight') { // Match Prompt
         isFight = true
         let opponentBoxer
         console.log(`Enter fight at: ${playerBoxer.rankTitle} rank!`)
@@ -234,25 +235,84 @@ while (runGame === true) {
         }
         console.log(`Your opponent is: ${opponentBoxer.firstName} '${opponentBoxer.nickname}' ${opponentBoxer.lastName}`)
         while (isFight && (opponentBoxer.currentHp > 0 || playerBoxer.currentHp > 0)) {
-            userChoice = ''
-            console.log('Fight [win] or [lose]: ')
-            userChoice = prompt()
-            if (userChoice === 'win') {
-                console.log('WIN!')
-                opponentBoxer.currentHp = 0
-                playerRank = new Rank(playerRank.rankNumber += 1)
-                playerBoxer.rankTitle = playerRank.rankTitle
-                playerBoxer.rankNumber = playerRank.rankNumber
-                console.log(`Your rank is now ${playerBoxer.rankTitle}`)
-                isFight = false
-                gymDays += 1
-            } else if (userChoice === 'lose') {
-                console.log('LOSE!')
-                playerBoxer.currentHp = 0
-                isFight = false
-                gymDays += 1
-            } else {
+            let jab: number;
+            let hook: number;
+            let uppercut: number;
+            let hitChance: number;
+            let fightOpt: string;
+            let defense: string;
+            defense = ''
+            fightOpt = ''
+            while (fightOpt !== 'j' && fightOpt !== 'h' && fightOpt !== 'u') { // Fight Options routes
+                console.log('Choose to [j]ab, [h]ook, or [u]ppercut: ')
+                fightOpt = prompt().toLowerCase()
+                if (fightOpt === 'j') {
+                    jab = (playerBoxer.strength/2)
+                    const damage = Math.floor(jab)
+                    opponentBoxer.currentHp -= damage
+                    console.log(`You quickly jab ${opponentBoxer.firstName} and hit them for ${damage}.`)
+                } else if (fightOpt === 'h') { // Hook
+                    hook = (randomInt(1, playerBoxer.strength + 1) - randomInt(0, opponentBoxer.tenacity))
+                    hitChance = randomInt(1, 10);
+                    console.log(hitChance)
+                    if (hitChance === 1) {
+                        console.log('You take a swing at the opponent and miss')
+                    } else if (hitChance >= 2 && hitChance <= 9) {
+                        console.log(`You land a good hook on ${opponentBoxer.firstName} for ${hook}.`)
+                    } else if (hitChance === 10) {
+                        hook = hook * 2;
+                        console.log(`You anticipate where ${opponentBoxer.firstName} dodges! You nail ${opponentBoxer.firstName} for ${hook}.`)
+                    } else{
+                        console.log('You take a swing at the opponent and miss')
+                    }
+                }
+                else if (fightOpt === 'u') { // Uppercut
+                    uppercut = (randomInt(1, playerBoxer.strength + 3) - randomInt(0, opponentBoxer.tenacity))
+                    hitChance = randomInt(1, 10);
+                    if (hitChance >= 1 && hitChance <= 3) {
+                        console.log(`You go for an uppercut, but ${opponentBoxer} dodges and you miss.`)
+                    } else if (hitChance >= 4 && hitChance <= 7) {
+                        console.log(`You land your uppercut on ${opponentBoxer.firstName} for ${uppercut}.`)
+                    } else if (hitChance >= 8 && hitChance <= 10) {
+                        console.log(`Solid connection! ${opponentBoxer.firstName} reels from the blow. You nail ${opponentBoxer.firstName} for ${uppercut}.`)
+                    } else{
+                    }
+                }
+                else {
+                }
             }
+            
+            if (opponentBoxer.currentHp <= 0) { // Victory Route
+                console.log(`${opponentBoxer.firstName} reels from your last blow and falls over, knocked out!`)
+                console.log(`Congratulations, you won the ${opponentBoxer.rankTitle} match against ${opponentBoxer.firstName} '${opponentBoxer.nickname}' ${opponentBoxer.lastName}!`)
+                playerRank = new Rank(playerBoxer.rankNumber += 1)
+                playerBoxer.rankNumber = playerRank.rankNumber
+                playerBoxer.rankTitle = playerRank.rankTitle
+                if (playerBoxer.rankNumber === 5) { 
+                    console.log(`You've beaten the ${opponentBoxer.rankTitle} and you are the new ${playerBoxer.rankTitle}!  You win!`)
+                    console.log(`Thanks for playing, hope you enjoyed becoming the world champion!`)
+                    isFight = false
+                    runGame = false
+                    break
+                } else {
+                    console.log(`You've beaten the ${opponentBoxer.rankTitle} and your new rank is ${playerBoxer.rankTitle}!`)
+                    for (const opponent of boxerOpponents) {
+                        if (opponent.rankNumber === playerBoxer.rankNumber) {
+                            opponentBoxer = opponent;
+                        } else {
+                        }
+                    }
+                    opponentBoxer.currentHp = 0
+                    console.log(`Your next opponent will be: ${opponentBoxer.firstName} '${opponentBoxer.nickname}' ${opponentBoxer.lastName}.`)
+                    isFight = false
+                }
+            }
+            // else { // Enemy Retaliate, Defense & player survival routes
+            //     let defense: string;
+            //     console.log(`${opponentBoxer.firstName} is still standing and comes in for the attack!`)
+            //     console.log(`Choose to: [d]odge or [b]lock`)
+            //     defense = prompt()
+            // }
         }
     }
     else if (userChoice === 'profile') {
