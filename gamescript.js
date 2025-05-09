@@ -227,6 +227,8 @@ while (runGame === true) {
             }
         }
         console.log("Your opponent is: ".concat(opponentBoxer.firstName, " '").concat(opponentBoxer.nickname, "' ").concat(opponentBoxer.lastName));
+        opponentBoxer.currentHp = opponentBoxer.maxHp;
+        console.log(opponentBoxer.currentHp);
         while (isFight && (opponentBoxer.currentHp > 0 || playerBoxer.currentHp > 0)) {
             var jab = void 0;
             var hook = void 0;
@@ -240,23 +242,23 @@ while (runGame === true) {
                 console.log('Choose to [j]ab, [h]ook, or [u]ppercut: ');
                 fightOpt = prompt().toLowerCase();
                 if (fightOpt === 'j') {
-                    jab = (playerBoxer.strength / 2);
-                    var damage = Math.floor(jab);
-                    opponentBoxer.currentHp -= damage;
-                    console.log("You quickly jab ".concat(opponentBoxer.firstName, " and hit them for ").concat(damage, "."));
+                    jab = Math.floor(playerBoxer.strength / 2);
+                    opponentBoxer.currentHp -= jab;
+                    console.log("You quickly jab ".concat(opponentBoxer.firstName, " and hit them for ").concat(jab, "."));
                 }
                 else if (fightOpt === 'h') { // Hook
                     hook = (randomInt(1, playerBoxer.strength + 1) - randomInt(0, opponentBoxer.tenacity));
                     hitChance = randomInt(1, 10);
-                    console.log(hitChance);
                     if (hitChance === 1) {
                         console.log('You take a swing at the opponent and miss');
                     }
                     else if (hitChance >= 2 && hitChance <= 9) {
+                        opponentBoxer.currentHp -= hook;
                         console.log("You land a good hook on ".concat(opponentBoxer.firstName, " for ").concat(hook, "."));
                     }
                     else if (hitChance === 10) {
                         hook = hook * 2;
+                        opponentBoxer.currentHp -= hook;
                         console.log("You anticipate where ".concat(opponentBoxer.firstName, " dodges! You nail ").concat(opponentBoxer.firstName, " for ").concat(hook, "."));
                     }
                     else {
@@ -267,12 +269,15 @@ while (runGame === true) {
                     uppercut = (randomInt(1, playerBoxer.strength + 3) - randomInt(0, opponentBoxer.tenacity));
                     hitChance = randomInt(1, 10);
                     if (hitChance >= 1 && hitChance <= 3) {
-                        console.log("You go for an uppercut, but ".concat(opponentBoxer, " dodges and you miss."));
+                        console.log("You go for an uppercut, but ".concat(opponentBoxer.firstName, " dodges and you miss."));
                     }
                     else if (hitChance >= 4 && hitChance <= 7) {
+                        opponentBoxer.currentHp -= uppercut;
                         console.log("You land your uppercut on ".concat(opponentBoxer.firstName, " for ").concat(uppercut, "."));
                     }
                     else if (hitChance >= 8 && hitChance <= 10) {
+                        uppercut = uppercut * 2;
+                        opponentBoxer.currentHp -= uppercut;
                         console.log("Solid connection! ".concat(opponentBoxer.firstName, " reels from the blow. You nail ").concat(opponentBoxer.firstName, " for ").concat(uppercut, "."));
                     }
                     else {
@@ -287,7 +292,7 @@ while (runGame === true) {
                 playerRank = new Rank(playerBoxer.rankNumber += 1);
                 playerBoxer.rankNumber = playerRank.rankNumber;
                 playerBoxer.rankTitle = playerRank.rankTitle;
-                if (playerBoxer.rankNumber === 5) {
+                if (playerBoxer.rankNumber === 6) {
                     console.log("You've beaten the ".concat(opponentBoxer.rankTitle, " and you are the new ").concat(playerBoxer.rankTitle, "!  You win!"));
                     console.log("Thanks for playing, hope you enjoyed becoming the world champion!");
                     isFight = false;
