@@ -58,7 +58,7 @@ class Rank {
     }
 }
 
-function randomInt(min, max) {
+function randomInt(min, max): number {
     const roundUp = Math.ceil(min);
     const roundDown = Math.floor(max);
     return Math.floor(Math.random() * (roundDown - roundUp + 1) + roundUp)
